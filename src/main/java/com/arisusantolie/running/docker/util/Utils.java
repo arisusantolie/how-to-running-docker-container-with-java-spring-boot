@@ -3,7 +3,10 @@ package com.arisusantolie.running.docker.util;
 import java.util.Random;
 
 public class Utils {
-
+    /*
+      Credit By : Ari Susanto Lie
+      Website : https://arisusantolie.my.id
+    */
     public static String generateRandomName(){
         // Set the length of the random string
         int length = 6;

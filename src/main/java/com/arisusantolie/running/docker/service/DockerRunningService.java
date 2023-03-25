@@ -16,39 +16,38 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class DockerRunningService {
+    /*
+      Credit By : Ari Susanto Lie
+      Website : https://arisusantolie.my.id
+    */
     @Autowired
     DockerClient dockerClient;
 
-    /*
-    Credit By : Ari Susanto Lie
-    Website : https://arisusantolie.my.id
- */
-
     public String runDockerContainer(){
         String containerName= Utils.generateRandomName();
+
+        /* to passing args we can use parameter */
         List<String> parameter=new ArrayList<>();
         parameter.add("--programName=processManager");
-//        parameter.add("--processManagerId="+data.getId());
+//        parameter.add("anotherParam="+data.getAnotherParam());
 
+        /* to add binding, we can use Bind */
 //        List<Bind> binds=new ArrayList<>();
-//        binds.add(Bind.parse(aesPath+":/dockerapp/scapps/scconfigserver/secure/aes"));
-//        binds.add(Bind.parse(dataPath+":/dockerapp/scapps/data"));
+//        binds.add(Bind.parse("path1:path1"));
+//        binds.add(Bind.parse("path2:path2"));
+
         HostConfig hostConfig=new HostConfig();
         hostConfig.withCpusetCpus("0");
         hostConfig.withMemory(Long.parseLong("268435456")); //bytes, in this setting equal = 256MB
+        /* network config */
 //        hostConfig.withNetworkMode("host");
+        /* bind config */
 //        hostConfig.withBinds(binds);
         CreateContainerResponse container=dockerClient.createContainerCmd("arisusantolie/executable-program:latest")
                 .withCmd(parameter)
                 .withName(containerName)
                 .withEnv("PROFILE=dev")
                 .withHostConfig(hostConfig)
-//                        .withNetworkMode("host")
-//                        .withBinds(Bind.parse("/dockerapp/scapps/scexecutableservice/test:/logs"))
-//                        .withBinds(Bind.parse("/scapp/data:/scapp/data"))
-//                        .withBinds(Bind.parse("/scapp/secure/aes:/scapp/secure/aes"))
-////                        .withCpusetCpus("1")
-//                        .withMemory(Long.parseLong("2099236864"))
                 .exec();
         dockerClient.startContainerCmd(container.getId()).exec();
 
